@@ -14,7 +14,7 @@ Misc Userscripts
 
 | Userscript Wiki                |               Direct Install               |  Created   |  Updated   |
 | ------------------------------ | :----------------------------------------: | :--------: | :--------: |
-| [CloudWatch Helper]((wiki/CloudWatch-Helper)) | [install](/main/cloudwatch-helper.user.js) | 30.03.2021 | 30.03.2021 |
+| [CloudWatch Helper](/wiki/CloudWatch-Helper) | [install](/cloudwatch-helper.user.js) | 30.03.2021 | 30.03.2021 |
 
 ## Updating
 
