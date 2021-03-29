@@ -12,9 +12,12 @@ Misc Userscripts
 2. Get information or install:
    - Install a script directly from GitHub by clicking on the "install" link in the table below.
 
-| Userscript Wiki                |               Direct Install               |  Created   |  Updated   |
-| ------------------------------ | :----------------------------------------: | :--------: | :--------: |
-| [CloudWatch Helper](/wiki/CloudWatch-Helper) | [install](/cloudwatch-helper.user.js) | 30.03.2021 | 30.03.2021 |
+| Userscript Wiki               |   Direct Install   |  Created   |  Updated   |
+| ----------------------------- | :----------------: | :--------: | :--------: |
+| [CloudWatch Helper][cwh-wiki] | [install][cwh-raw] | 30.03.2021 | 30.03.2021 |
+
+[cwh-wiki]: https://github.com/MishaKav/userscripts/wiki/CloudWatch-Helper
+[cwh-raw]: https://raw.githubusercontent.com/MishaKav/userscripts/main/cloudwatch-helper.user.js
 
 ## Updating
 
