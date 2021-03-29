@@ -28,8 +28,8 @@
     { level: "[TRACE]", color: "#888888" },
     { level: "[DEBUG]", color: "#4DC3FF" },
     { level: "[INFO]", color: "#4BB4BB" },
-    { level: "[WARN]", color: "#FFFF80" },
-    { level: "[ERROR]", color: "#FFB3B3" },
+    { level: "[WARN]", color: "#EFBC5F" },
+    { level: "[ERROR]", color: "#DE8686" },
     { level: "[FATAL]", color: "#ff0000" },
   ];
   const NOISE_CONTENT = [
