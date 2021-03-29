@@ -2,7 +2,7 @@
 // @name         CloudWatch Helper
 // @namespace    https://github.com/MishaKav/userscripts/cloudwatch-helper
 // @version      1.0.0
-// @description  A userscript that adds simple buttons to help see the logs of sns
+// @description  A userscript that adds ability to Hide Noise, Highlight the log level, Format the date and show message inside sns in json format
 // @author       Misha Kav
 // @copyright    2021, Misha Kav
 // @match        https://*.console.aws.amazon.com/cloudwatch/*
