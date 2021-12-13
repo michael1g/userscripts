@@ -14,7 +14,7 @@ Misc Userscripts
 
 | Userscript Wiki               |   Direct Install   |  Created   |  Updated   |
 | ----------------------------- | :----------------: | :--------: | :--------: |
-| [CloudWatch Helper][cwh-wiki] | [install][cwh-raw] | 30.03.2021 | 30.03.2021 |
+| [CloudWatch Helper][cwh-wiki] | [install][cwh-raw] | 30.03.2021 | 13.12.2021 |
 
 [cwh-wiki]: https://github.com/MishaKav/userscripts/wiki/CloudWatch-Helper
 [cwh-raw]: https://raw.githubusercontent.com/MishaKav/userscripts/main/cloudwatch-helper.user.js
