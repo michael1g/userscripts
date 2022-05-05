@@ -20,6 +20,8 @@
 // @supportURL  https://github.com/MishaKav/userscripts/issues
 // ==/UserScript==
 
+/* global $, jQuery, NC */
+
 (function () {
   'use strict';
 
