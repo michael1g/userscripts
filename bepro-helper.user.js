@@ -15,9 +15,9 @@
 // @grant       GM_registerMenuCommand
 // @grant       GM_unregisterMenuCommand
 // @run-at      document-end
-// @updateURL    https://raw.githubusercontent.com/MishaKav/userscripts/main/bepro-helper.user.js
-// @downloadURL  https://raw.githubusercontent.com/MishaKav/userscripts/main/bepro-helper.user.js
-// @supportURL   https://github.com/MishaKav/userscripts/issues
+// @updateURL   https://raw.githubusercontent.com/MishaKav/userscripts/bepro/bepro-helper.user.js
+// @downloadURL https://raw.githubusercontent.com/MishaKav/userscripts/bepro/bepro-helper.user.js
+// @supportURL  https://github.com/MishaKav/userscripts/issues
 // ==/UserScript==
 
 (function () {
@@ -100,7 +100,6 @@
       $('#MakeLink').click(() => {
         if (isNotEmptyObject(NC.Widgets.B2B.MyOrdersWidget._CurrentOrder)) {
           _Order = NC.Widgets.B2B.MyOrdersWidget._CurrentOrder;
-          console.log(_Order);
           //RegisterCommand(_Order.OrderRow.SegmentId);
           NC.Widgets.B2B.Utils.SmallSuccessBox(
             'Order Remembered Successfully: ' + _Order.OrderRow.SegmentId
