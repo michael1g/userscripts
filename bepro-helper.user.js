@@ -120,6 +120,7 @@
   function makeTravelBoosterUrl() {
     if (isNotEmptyObject(_Order)) {
       const [segment] = _Order.Order.Segments;
+      const isHotel = segment.ProductType === 'HTL';
       const {
         OrderSegId,
         SuppPnr,
@@ -163,7 +164,7 @@
         SysTotalGross,
         SysTotalGross2,
         SysSuppCode,
-        SysBasisCode: Rooms[0].SysBasisCode,
+        SysBasisCode: isHotel && Rooms[0].SysBasisCode,
         SysCurrencyCode,
         NumberOfNights,
         ItemAddress,
@@ -174,6 +175,8 @@
         Paxes,
       };
 
+      const isSupportedSupplier = SUPPLIERS[SysSuppCode] != null;
+      const disabled = isHotel && isSupportedSupplier ? '' : 'disabled';
       const queryString = `Order=${encodeURIComponent(
         JSON.stringify(miniOrder)
       )}`;
@@ -181,9 +184,9 @@
       $('#TravelBoosterUrl').remove();
       $('#MakeLink').after(
         `<a target='_blank' id='TravelBoosterUrl' 
-          class='btn btn-xs btn-danger margin-top-5 margin-left10' 
-          href='https://b2e-genesis-out.travelbooster.com/UI_NET/Services/Hotel/Index.aspx?${queryString}'>
-          Travel Booster ${_Order.OrderRow.SegmentId}
+        class='btn btn-xs btn-danger margin-top-5 margin-left10 ${disabled}' 
+        href='https://b2e-genesis-out.travelbooster.com/UI_NET/Services/Hotel/Index.aspx?${queryString}'>
+          Travel Booster #${_Order.OrderRow.SegmentId}
          </a>`
       );
     } else {
