@@ -225,12 +225,21 @@
        </details>`
     );
     jQuery('[id*=frmTransact_btnContinue').before(
+      `<input type="button" id="FillSaveDetails" class="button marginAltSide10"
+          style="background-color: #356e35"
+          value="Fill & Save"
+       />`
+    );
+    jQuery('[id*=frmTransact_btnContinue').before(
       `<input type="button" id="FillDetails" class="button marginAltSide10"
           style="background-color: #356e35"
           value="Fill"
        />`
     );
     jQuery('#FillDetails').click(fillHotelDetails);
+    jQuery('#FillSaveDetails').click(() =>
+      fillHotelDetails({ shouldSave: true })
+    );
   }
 
   function seeHotelDetails() {
@@ -238,7 +247,7 @@
     alert(JSON.stringify(order, null, 2));
   }
 
-  async function fillHotelDetails() {
+  async function fillHotelDetails(options = {}) {
     if (isTravelBoosterSite() && isNotEmptyObject(_Order)) {
       fillGeneralDetails();
       fillDates();
@@ -246,24 +255,24 @@
       fillAddress();
 
       await sleep(1000);
-      showPricingTab();
+      showPricingTab(options);
     }
   }
 
-  async function showPricingTab() {
+  async function showPricingTab(options = {}) {
     jQuery('[id*=tabPassengers_A]').trigger(jQuery.Event('click'));
-    await addPax();
+    await addPax(options);
   }
 
-  async function addPax() {
+  async function addPax(options = {}) {
     jQuery('[id*=dlCustomers_ctl01_chkSelected]')
       .prop('checked', true)
       .trigger(jQuery.Event('change'));
     await sleep();
-    await addCurrency();
+    await addCurrency(options);
   }
 
-  async function addCurrency() {
+  async function addCurrency(options = {}) {
     const { SysCurrencyCode = 'USD' } = _Order;
 
     jQuery('[id*=editCustomers_frmTransact_ddlCurrency]')
@@ -271,12 +280,12 @@
       .trigger(jQuery.Event('change'));
 
     await sleep();
-    await addPrice();
+    await addPrice(options);
     await sleep();
-    await addPrice();
+    await addPrice(options);
   }
 
-  async function addPrice() {
+  async function addPrice({ shouldSave }) {
     const { SysTotalGross, SysTotalGross2, OrderSegId } = _Order;
 
     jQuery('[id*=ctl01_txtNet]')
@@ -286,8 +295,11 @@
       .val(SysTotalGross2)
       .trigger(jQuery.Event('change'));
 
-    // jQuery('[id*=frmTransact_btnContinue').click();
     console.log(`Finish To Fill Order: #${OrderSegId}`);
+
+    if (shouldSave) {
+      jQuery('[id*=frmTransact_btnContinue').click();
+    }
   }
 
   function saveOrderFromQueryStringToStorage() {
