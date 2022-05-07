@@ -207,11 +207,12 @@
     if (isTravelBoosterSite()) {
       saveOrderFromQueryStringToStorage();
       await sleep();
-      addButtons();
+      addHotelButtons();
+      addPaxesButtons();
     }
   }
 
-  function addButtons() {
+  function addHotelButtons() {
     if (!jQuery || !jQuery().jquery) {
       return;
     }
@@ -236,10 +237,43 @@
           value="Fill"
        />`
     );
+
     jQuery('#FillDetails').click(fillHotelDetails);
     jQuery('#FillSaveDetails').click(() =>
       fillHotelDetails({ shouldSave: true })
     );
+  }
+
+  function addPaxesButtons() {
+    if (!jQuery || !jQuery().jquery) {
+      return;
+    }
+
+    const order = JSON.stringify(_Order.Paxes, null, 2);
+    jQuery('[id*=CustomersList1_pnlCustomers').before(
+      `<details>
+          <summary>Details #${_Order.OrderSegId} (${_Order.Paxes.length} Paxes)</summary>
+          <pre>${order}</pre>
+       </details>`
+    );
+
+    jQuery('[id*=InformationContent_btnContinue').before(
+      `<input type="button" id="FillPaxes" class="button marginAltSide10"
+          style="background-color: #356e35"
+          value="Fill"
+       />`
+    );
+
+    jQuery('#FillPaxes').click(fillPaxesDetails);
+  }
+
+  async function fillPaxesDetails() {
+    if (isTravelBoosterSite() && isNotEmptyObject(_Order)) {
+      for (let i = 0; i < _Order.Paxes.length - 1; i++) {
+        jQuery('[id*=CustomersList1_btnAddPax]').click();
+        await sleep();
+      }
+    }
   }
 
   function seeHotelDetails() {
