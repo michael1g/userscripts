@@ -318,7 +318,7 @@
       for (let i = 0; i < _Order.Paxes.length; i++) {
         if (i !== 0) {
           jQuery('[id*=CustomersList1_btnAddPax]').click();
-          await sleep(600);
+          await sleep(800);
         }
         const pax = _Order.Paxes[i];
         const row = jQuery('[id*=pnlCustomers] [divid=divCustomer]:last');
