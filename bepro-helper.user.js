@@ -334,8 +334,9 @@
   }
 
   function fillDestination() {
-    jQuery('[id*=cbAreas_tbAutoComplete]').val(_Order.SuppCityDesc);
-    // jQuery('[id*=cbAreas_hfAutoComplete]').val(_Order.SuppCityDesc);
+    // jQuery('[id*=cbAreas_tbAutoComplete]').val(_Order.SuppCityDesc);
+    jQuery('[id*=cbAreas_tbAutoComplete]').val('Tel Aviv, TLV, Israel, ');
+    jQuery('[id*=cbAreas_hfAutoComplete]').val(4455); // Tel Aviv, TLV, Israel,
   }
 
   function fillDates() {
