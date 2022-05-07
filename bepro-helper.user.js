@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        BePro Global Export
 // @namespace   https://issta.beprotravel.com/
-// @version     1.0.1
+// @version     1.0.2
 // @description This userscript send help to fill some order information in external systems
 // @author      Misha Kav
 // @copyright   2022, Misha Kav
