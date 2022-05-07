@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        BePro Global Export
 // @namespace   https://issta.beprotravel.com/
-// @version     1.0.0
+// @version     1.0.1
 // @description This userscript send help to fill some order information in external systems
 // @author      Misha Kav
 // @copyright   2022, Misha Kav
@@ -30,9 +30,20 @@
 
   const SUPPLIERS = {
     gogb: 'GO GLOBAL TRAVEL',
-    ean1: 'EXPEDIA',
-    ean2: 'EXPEDIA',
     ean7: 'EXPEDIA',
+    ean8: 'EXPEDIA',
+    hbed: 'EXPEDIA',
+    hb5: 'HOTELBEDS',
+    tboh: 'TBO HOLIDAYS EUROPE BV',
+    trvc: 'TRAVCO',
+    trv6: 'TRAVCO',
+    airt: 'AIRTOUR',
+    asa: 'ANGELA SHANLEY ASSOCIATES LTD',
+    eutr: 'EUROTOURS INTERNATIONAL',
+    hpro: 'HOTELSPRO',
+    htsw: 'HOTUSA (RESTEL)',
+    sunh: 'WELCOMEBEDS',
+    tdor: 'TELDAR',
   };
 
   const STATUSES = {
@@ -43,6 +54,16 @@
     CX: 'CancelledWithConfirm',
   };
 
+  const PAX_TITLES = {
+    'Mr.': { paxTitle: 'Mr.', paxValue: 'MR' },
+    'Mrs.': { paxTitle: 'Mrs.', paxValue: 'MRS' },
+    'Ms.': { paxTitle: 'Ms.', paxValue: 'MS' },
+    'Miss.': { paxTitle: 'Miss.', paxValue: 'MISS' },
+    'Dr.': { paxTitle: 'Dr.', paxValue: 'DR' },
+    'Prof.': { paxTitle: 'Prof.', paxValue: 'PROF' },
+    Child: { paxTitle: 'Chd.', paxValue: 'CHD' },
+  };
+
   // for local debug
   // @require      file:///Users/misha/Downloads/GithubSamples/userscripts/bepro-helper.user.js
 
@@ -51,10 +72,24 @@
     new Promise((resolve) => setTimeout(resolve, ms));
   const isBeProSite = () => location.href.includes('beprotravel');
   const isTravelBoosterSite = () => location.href.includes('travelbooster');
+  const isHotelDetailsPage = () =>
+    location.href.includes('PaxFile/EditTransaction.aspx');
+  const isPaxesDetailsPage = () =>
+    location.href.includes('Customer/AddCustomer.aspx');
   const isEmptyObject = (obj) =>
     obj == null ||
     (obj && obj.constructor === Object && Object.keys(obj).length === 0);
   const isNotEmptyObject = (obj) => !isEmptyObject(obj);
+  const formatDate = (dateStr, year4Digits = true) => {
+    const date = new Date(dateStr);
+    const day = ('0' + date.getDate()).slice(-2);
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const year = year4Digits
+      ? date.getFullYear()
+      : date.getFullYear().toString().substring(2);
+
+    return `${day}/${month}/${year}`;
+  };
   const getQueryStringByName = (name, url) => {
     if (!url) {
       url = window.location.href;
@@ -161,6 +196,7 @@
         PaxTitle: p.PaxTitle,
         Mobile1: p.Mobile1,
         Phone1: p.Phone1,
+        Email1: p.Email1,
       }));
       const miniOrder = {
         OrderSegId,
@@ -213,7 +249,7 @@
   }
 
   function addHotelButtons() {
-    if (!jQuery || !jQuery().jquery) {
+    if (isHotelDetailsPage() && (!jQuery || !jQuery().jquery)) {
       return;
     }
 
@@ -245,7 +281,7 @@
   }
 
   function addPaxesButtons() {
-    if (!jQuery || !jQuery().jquery) {
+    if (isPaxesDetailsPage() && (!jQuery || !jQuery().jquery)) {
       return;
     }
 
@@ -258,6 +294,13 @@
     );
 
     jQuery('[id*=InformationContent_btnContinue').before(
+      `<input type="button" id="FillSavePaxes" class="button marginAltSide10"
+          style="background-color: #356e35"
+          value="Fill & Save"
+       />`
+    );
+
+    jQuery('[id*=InformationContent_btnContinue').before(
       `<input type="button" id="FillPaxes" class="button marginAltSide10"
           style="background-color: #356e35"
           value="Fill"
@@ -265,13 +308,50 @@
     );
 
     jQuery('#FillPaxes').click(fillPaxesDetails);
+    jQuery('#FillSavePaxes').click(() =>
+      fillPaxesDetails({ shouldSave: true })
+    );
   }
 
-  async function fillPaxesDetails() {
+  async function fillPaxesDetails({ shouldSave = false }) {
     if (isTravelBoosterSite() && isNotEmptyObject(_Order)) {
-      for (let i = 0; i < _Order.Paxes.length - 1; i++) {
-        jQuery('[id*=CustomersList1_btnAddPax]').click();
-        await sleep();
+      for (let i = 0; i < _Order.Paxes.length; i++) {
+        if (i !== 0) {
+          jQuery('[id*=CustomersList1_btnAddPax]').click();
+          await sleep(600);
+        }
+        const pax = _Order.Paxes[i];
+        const row = jQuery('[id*=pnlCustomers] [divid=divCustomer]:last');
+        const { paxTitle, paxValue } =
+          PAX_TITLES[pax.PaxTitle] ?? PAX_TITLES['Mr.'];
+        row.find('[id*=ddlTitle_TBText').val(paxTitle);
+        row.find('[id*=ddlTitle_TBValue').val(paxValue);
+
+        row.find('[id*=tbLastName').val(pax.LastName);
+        row.find('[id*=tbFirstName').val(pax.FirstName);
+
+        if (pax.DOB !== '1900-01-01T00:00:00') {
+          row
+            .find('[id*=dsBirthDate_tbCalendar')
+            .val(formatDate(pax.DOB, false))
+            .trigger(jQuery.Event('change'));
+        }
+
+        row.find('[id*=tbEmail').val(pax.Email1);
+        row.find('[id*=tbPhone').val(pax.Phone1 || pax.Mobile1);
+
+        row.find('[id*=ddlGender_TBText').val(pax.Gender);
+        row.find('[id*=ddlGender_TBValue').val(pax.Gender);
+      }
+
+      jQuery('#FillPaxes, #FillSavePaxes')
+        .prop('disabled', true)
+        .css('background-color', '#ddd')
+        .css('pointer-events', 'none');
+      console.log(`${_Order.Paxes.length} Paxes filled successfully`);
+
+      if (shouldSave) {
+        jQuery('[id*=InformationContent_btnContinue').click();
       }
     }
   }
@@ -375,16 +455,8 @@
 
   function fillDates() {
     const { CheckIn, CheckOut } = _Order;
-    const checkIn = new Date(CheckIn);
-    const checkInDate = ('0' + checkIn.getDate()).slice(-2);
-    const checkInMonth = ('0' + (checkIn.getMonth() + 1)).slice(-2);
-    const checkInYear = checkIn.getFullYear();
-    const checkInString = `${checkInDate}/${checkInMonth}/${checkInYear}`;
-    const checkOut = new Date(CheckOut);
-    const checkOutDate = ('0' + checkOut.getDate()).slice(-2);
-    const checkOutMonth = ('0' + (checkOut.getMonth() + 1)).slice(-2);
-    const checkOutYear = checkOut.getFullYear();
-    const checkOutString = `${checkOutDate}/${checkOutMonth}/${checkOutYear}`;
+    const checkInString = formatDate(CheckIn);
+    const checkOutString = formatDate(CheckOut);
 
     jQuery('[id*=frmDates_dsStartDate_hfDate]')
       .val(checkInString)
