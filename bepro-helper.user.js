@@ -95,25 +95,35 @@
 
   function initBeProSite() {
     if (isBeProSite() && $('#wid-id-myorders').length > 0) {
-      $('#wid-id-myorders header span:first').after(
-        "<button id='MakeLink' class='btn btn-xs btn-warning margin-top-5'>Make Link</button>"
-      );
-
-      $('#MakeLink').click(() => {
+      // track change order on b2b
+      $('#ActiveOrder').on('DOMSubtreeModified', () => {
         if (isNotEmptyObject(NC.Widgets.B2B.MyOrdersWidget._CurrentOrder)) {
           _Order = NC.Widgets.B2B.MyOrdersWidget._CurrentOrder;
-          //RegisterCommand(_Order.OrderRow.SegmentId);
-          NC.Widgets.B2B.Utils.SmallSuccessBox(
-            'Order Remembered Successfully: ' + _Order.OrderRow.SegmentId
-          );
-
+          // prettier-ignore
+          // NC.Widgets.B2B.Utils.SmallSuccessBox('Order Remembered Successfully: ' + _Order.OrderRow.SegmentId);
           makeTravelBoosterUrl();
-        } else {
-          NC.Widgets.B2B.Utils.SmallWarningBox(
-            'Please, Select the Order first'
-          );
         }
       });
+
+      // $('#wid-id-myorders header span:first').after(
+      //   "<button id='MakeLink' class='btn btn-xs btn-warning margin-top-5'>Make Link</button>"
+      // );
+
+      // $('#MakeLink').click(() => {
+      //   if (isNotEmptyObject(NC.Widgets.B2B.MyOrdersWidget._CurrentOrder)) {
+      //     _Order = NC.Widgets.B2B.MyOrdersWidget._CurrentOrder;
+      //     //RegisterCommand(_Order.OrderRow.SegmentId);
+      //     NC.Widgets.B2B.Utils.SmallSuccessBox(
+      //       'Order Remembered Successfully: ' + _Order.OrderRow.SegmentId
+      //     );
+
+      //     makeTravelBoosterUrl();
+      //   } else {
+      //     NC.Widgets.B2B.Utils.SmallWarningBox(
+      //       'Please, Select the Order first'
+      //     );
+      //   }
+      // });
     }
   }
 
@@ -182,16 +192,15 @@
       )}`;
 
       $('#TravelBoosterUrl').remove();
-      $('#MakeLink').after(
+      $('#wid-id-myorders header span:first').after(
         `<a target='_blank' id='TravelBoosterUrl' 
-        class='btn btn-xs btn-danger margin-top-5 margin-left10 ${disabled}' 
+        class='btn btn-xs btn-danger margin-top-5 margin-top-5 ${disabled}' 
         href='https://b2e-genesis-out.travelbooster.com/UI_NET/Services/Hotel/Index.aspx?${queryString}'>
           Travel Booster #${_Order.OrderRow.SegmentId}
          </a>`
       );
-    } else {
-      NC.Widgets.B2B.Utils.SmallWarningBox('Please, Select the Order first');
     }
+    // NC.Widgets.B2B.Utils.SmallWarningBox('Please, Select the Order first');
   }
 
   async function initTravelBooster() {
