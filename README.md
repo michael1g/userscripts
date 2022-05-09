@@ -12,25 +12,6 @@ Misc Userscripts
 2. Get information or install:
    - Install a script directly from GitHub by clicking on the "install" link in the table below.
 
-| Userscript Wiki               |   Direct Install   |  Created   |  Updated   |
-| ----------------------------- | :----------------: | :--------: | :--------: |
-| [CloudWatch Helper][cwh-wiki] | [install][cwh-raw] | 30.03.2021 | 13.12.2021 |
 
-[cwh-wiki]: https://github.com/MishaKav/userscripts/wiki/CloudWatch-Helper
-[cwh-raw]: https://raw.githubusercontent.com/MishaKav/userscripts/main/cloudwatch-helper.user.js
 
-## Updating
 
-Userscripts are set up to automatically update. You can check for updates from within the Greasemonkey or Tampermonkey menu, or click on the install link again to get the update.
-
-## Issues
-
-Please report any userscript issues within this repository's [issue section](https://github.com/MishaKav/userscripts/issues). Thanks!
-
-## Contributions
-
-If you would like to contribute to this repository, please...
-
-1. Fork
-2. Make changes)
-3. Create a pull request!
